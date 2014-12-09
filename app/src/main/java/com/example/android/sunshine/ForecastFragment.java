@@ -49,22 +49,21 @@ public class ForecastFragment extends Fragment {
         ListView listView= (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mforecastAdapter);
 
-        new RetreiveForecastTask().execute("");
+        new RetreiveForecastTask().execute();
         return rootView;
     }
 
 
-    public class RetreiveForecastTask extends AsyncTask<String,Void,BufferedReader> {
+    public class RetreiveForecastTask extends AsyncTask<Void,Void,Void> {
+
+        private final String LOG_TAG = RetreiveForecastTask.class.getSimpleName();
 
         @Override
-        protected BufferedReader doInBackground(String... url1) {
+        protected Void doInBackground(Void... params) {
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-
-            // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
 
             try {
                 // Construct the URL for the OpenWeatherMap query
@@ -82,7 +81,7 @@ public class ForecastFragment extends Fragment {
                 StringBuffer buffer = new StringBuffer();
                 if (inputStream == null) {
                     // Nothing to do.
-                    forecastJsonStr = null;
+                    return null;
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -96,14 +95,13 @@ public class ForecastFragment extends Fragment {
 
                 if (buffer.length() == 0) {
                     // Stream was empty.  No point in parsing.
-                    forecastJsonStr = null;
+                    return null;
                 }
-                forecastJsonStr = buffer.toString();
             } catch (IOException e) {
-                Log.e("PlaceholderFragment", "Error ", e);
+                Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
-                forecastJsonStr = null;
+                return null;
             } finally{
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -112,11 +110,11 @@ public class ForecastFragment extends Fragment {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e("PlaceholderFragment", "Error closing stream", e);
+                        Log.e(LOG_TAG, "Error closing stream", e);
                     }
                 }
             }
-            return reader;
+            return null;
         }
     }
 }
