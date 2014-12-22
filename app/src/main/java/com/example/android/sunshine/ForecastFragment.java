@@ -39,7 +39,7 @@ public class ForecastFragment extends Fragment {
 
      @Override
      public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-         inflater.inflate(R.menu.menu_main, menu);
+         inflater.inflate(R.menu.forecastfragment, menu);
      }
 
      @Override
@@ -49,6 +49,8 @@ public class ForecastFragment extends Fragment {
          // as you specify a parent activity in AndroidManifest.xml.
          int id = item.getItemId();
          if (id == R.id.action_refresh) {
+             RetreiveForecastTask weatherTask = new RetreiveForecastTask();
+             weatherTask.execute();
              return true;
          }
          return super.onOptionsItemSelected(item);
@@ -77,7 +79,7 @@ public class ForecastFragment extends Fragment {
         ListView listView= (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mforecastAdapter);
 
-        new RetreiveForecastTask().execute();
+        //new RetreiveForecastTask().execute();
         return rootView;
     }
 
