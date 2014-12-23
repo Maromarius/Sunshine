@@ -62,6 +62,10 @@ public class ForecastFragment extends Fragment {
              weatherTask.execute("H7N5N8");
              return true;
          }
+         if (id == R.id.action_settings) {
+             startActivity( new Intent(getActivity(), SettingsActivity.class));
+             return true;
+         }
          return super.onOptionsItemSelected(item);
      }
 
